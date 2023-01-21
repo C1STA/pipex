@@ -18,11 +18,11 @@ all : $(NAME)
 $(NAME): $(OBJ)
 	$(MAKE) --no-print-directory -C lib/libft
 	echo "\033[36mMaking pipex\033[0m"
-	$(CC) $(OBJ) $(LIBFT) -o $(NAME) -g
+	$(CC) $(CFLAGS) $(OBJ) $(LIBFT) -o $(NAME) -g
 	echo "\033[32mDone\033[0m"
 
 %.o : $(SRCPATH)%.c
-	$(CC) -c $^  -g
+	$(CC) $(CFLAGS) -c $^ -g
 
 bonus : all
 
