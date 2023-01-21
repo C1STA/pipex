@@ -6,7 +6,7 @@
 /*   By: wcista <wcista@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/01/17 16:34:06 by wcista            #+#    #+#             */
-/*   Updated: 2023/01/18 16:59:09 by wcista           ###   ########.fr       */
+/*   Updated: 2023/01/21 17:07:26 by wcista           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -47,31 +47,28 @@ void	get_paths(t_p *p, char *env[])
 void	check_access(t_p *p)
 {
 	int		i;
-	char	*tmp;
 
 	i = 0;
 	while (p->paths[i])
 	{
-		p->cmd1_path = ft_strjoin(p->paths[i], p->cmd1_args[0]);
-		if (!access(p->cmd1_path, F_OK | X_OK))
+		p->cmd_path = ft_strjoin(p->paths[i], p->cmd_args[0]);
+		if (!access(p->cmd_path, F_OK | X_OK))
 			return ;
-		free(p->cmd1_path);
+		free(p->cmd_path);
 		i++;
 	}
-	perror("Access ");
-	p->cmd1_path = NULL;
-	error_return(p, 0);
+	p->cmd_path = ft_strjoin(p->paths[i - 1], p->cmd_args[0]);
 }
 
-int	check_raw_access(t_p *p, char *av[])
+int	check_raw_access(t_p *p, char *av)
 {
 	char	**cmd;
 
-	cmd = ft_split(av[2], ' ');
+	cmd = ft_split(av, ' ');
 	if (!access(cmd[0], F_OK | X_OK))
 	{
-		p->cmd1_path = ft_substr(cmd[0], 0, ft_strlen(cmd[0]));
-		p->cmd1_args = ft_split(av[2], ' ');
+		p->cmd_path = ft_substr(cmd[0], 0, ft_strlen(cmd[0]));
+		p->cmd_args = ft_split(av, ' ');
 		free_tab(cmd);
 		return (0);
 	}
@@ -79,13 +76,12 @@ int	check_raw_access(t_p *p, char *av[])
 	return (1);
 }
 
-void	get_data(t_p *p, char *av[], char *env[])
+void	get_data(t_p *p, char *av, char *env[])
 {
 	if (check_raw_access(p, av))
 	{
 		get_paths(p, env);
-		p->cmd1_args = ft_split(av[2], ' ');
-		p->cmd2_args = ft_split(av[3], ' ');
+		p->cmd_args = ft_split(av, ' ');
 		check_access(p);
 	}
 }
@@ -93,8 +89,6 @@ void	get_data(t_p *p, char *av[], char *env[])
 void	initialize_struct(t_p *p)
 {
 	p->paths = NULL;
-	p->cmd1_args = NULL;
-	p->cmd2_args = NULL;
-	p->cmd1_path = NULL;
-	p->cmd2_path = NULL;
+	p->cmd_args = NULL;
+	p->cmd_path = NULL;
 }
