@@ -6,20 +6,11 @@
 /*   By: wcista <wcista@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/01/17 16:34:06 by wcista            #+#    #+#             */
-/*   Updated: 2023/01/21 17:07:26 by wcista           ###   ########.fr       */
+/*   Updated: 2023/01/22 13:54:15 by wcista           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "../inc/pipex.h"
-
-/* void	child_one(int f1, char *cmd1)
-{
-	dup2(f1, STDIN_FILENO);
-}
-
-void	child_two(int f2, char *cmd2)
-{
-} */
 
 void	get_paths(t_p *p, char *env[])
 {
