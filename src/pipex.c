@@ -6,7 +6,7 @@
 /*   By: wcista <wcista@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/01/13 14:06:05 by wcista            #+#    #+#             */
-/*   Updated: 2023/01/21 20:04:48 by wcista           ###   ########.fr       */
+/*   Updated: 2023/01/27 18:08:57 by wcista           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -19,7 +19,10 @@ void	child_one(t_p *p, char *av[], char *env[])
 	close (p->fd[0]);
 	infile = open(av[1], O_RDONLY);
 	if (infile < 0)
+	{
+		close(p->fd[1]);
 		error_return(p, av, 1);
+	}
 	dup2(infile, STDIN_FILENO);
 	dup2(p->fd[1], STDOUT_FILENO);
 	close(p->fd[1]);
@@ -37,7 +40,10 @@ void	child_two(t_p *p, char *av[], char *env[])
 	initialize_struct(p);
 	outfile = open(av[4], O_CREAT | O_RDWR | O_TRUNC, 0644);
 	if (outfile < 0)
+	{
+		close(p->fd[0]);
 		error_return(p, av, 1);
+	}
 	dup2(outfile, STDOUT_FILENO);
 	dup2(p->fd[0], STDIN_FILENO);
 	close(p->fd[0]);
