@@ -6,7 +6,7 @@
 /*   By: wcista <wcista@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/01/13 13:52:20 by wcista            #+#    #+#             */
-/*   Updated: 2023/01/21 19:16:34 by wcista           ###   ########.fr       */
+/*   Updated: 2023/04/05 16:30:33 by wcista           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -34,7 +34,7 @@ typedef struct s_pipex
 // Free (the world)
 void	free_everything(t_p *p);
 void	free_tab(char **array);
-void	error_return(t_p *p, char *av[], int n);
+void	error_return(t_p *p, char *s);
 
 // Reading and treating data from arguments and environnement
 void	get_paths(t_p *p, char *env[]);

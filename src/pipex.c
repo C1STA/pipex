@@ -6,7 +6,7 @@
 /*   By: wcista <wcista@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/01/13 14:06:05 by wcista            #+#    #+#             */
-/*   Updated: 2023/01/21 20:04:48 by wcista           ###   ########.fr       */
+/*   Updated: 2023/04/05 17:28:15 by wcista           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -19,14 +19,23 @@ void	child_one(t_p *p, char *av[], char *env[])
 	close (p->fd[0]);
 	infile = open(av[1], O_RDONLY);
 	if (infile < 0)
-		error_return(p, av, 1);
+	{	
+		close (p->fd[1]);
+		error_return(p, av[1]);
+	}
+	if (access(av[1], R_OK) == -1)
+	{
+		close (p->fd[1]);
+		close(infile);
+		error_return(p, av[1]);
+	}
 	dup2(infile, STDIN_FILENO);
 	dup2(p->fd[1], STDOUT_FILENO);
 	close(p->fd[1]);
 	close(infile);
 	get_data(p, av[2], env);
 	if ((execve(p->cmd_path, p->cmd_args, env)) < 0)
-		error_return(p, av, 0);
+		error_return(p, p->cmd_args[0]);
 }
 
 void	child_two(t_p *p, char *av[], char *env[])
@@ -37,14 +46,23 @@ void	child_two(t_p *p, char *av[], char *env[])
 	initialize_struct(p);
 	outfile = open(av[4], O_CREAT | O_RDWR | O_TRUNC, 0644);
 	if (outfile < 0)
-		error_return(p, av, 1);
+	{
+		close(p->fd[0]);
+		error_return(p, av[4]);
+	}
+	if (access(av[4], W_OK) == -1)
+	{
+		close(p->fd[1]);
+		close(outfile);
+		error_return(p, av[4]);
+	}
 	dup2(outfile, STDOUT_FILENO);
 	dup2(p->fd[0], STDIN_FILENO);
 	close(p->fd[0]);
 	close(outfile);
 	get_data(p, av[3], env);
 	if ((execve(p->cmd_path, p->cmd_args, env)) < 0)
-		error_return(p, av, 0);
+		error_return(p, p->cmd_args[0]);
 }
 
 void	pipex(t_p *p, char *av[], char *env[])
